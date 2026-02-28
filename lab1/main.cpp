@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <cstdlib>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ vector<vector<int>> ReadMatrix(int &n, int &m, const string filename)
     return matrix;
 }
 
-vector<vector<int>> MultiplyMatrix(int n, int m, const vector<vector<int>> A, const vector<vector<int>> B)
+vector<vector<int>> MultiplyMatrix(int n, int m, int p, const vector<vector<int>> A, const vector<vector<int>> B)
 {
 
     vector<vector<int>> res(n, vector<int>(m));
@@ -42,7 +43,7 @@ vector<vector<int>> MultiplyMatrix(int n, int m, const vector<vector<int>> A, co
     {
         for (int j = 0; j < m; j++)
         {
-            for (int k = 0; k < n; k++)
+            for (int k = 0; k < p; k++)
             {
                 res[i][j] += A[i][k] * B[k][j];
             }
@@ -71,13 +72,41 @@ void WriteMatrix(string filename, int n, int m, const vector<vector<int>> A, chr
         {
             file << A[i][j];
 
-            if (j < n - 1)
+            if (j < m - 1)
                 file << " ";
         }
         file << "\n";
     }
     file << "Time: " << t;
     file << "\nCorrectly: " << cor;
+    file.close();
+}
+
+void WriteMatrix(string filename, int n, int m, const vector<vector<int>> A)
+{
+
+    ofstream file(filename);
+
+    if (!file.is_open())
+    {
+        cout << "couldn't open the file" << filename << "\n";
+        return;
+    }
+
+    file << n << " " << m << "\n";
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            file << A[i][j];
+
+            if (j < m - 1)
+                file << " ";
+        }
+        file << "\n";
+    }
+
     file.close();
 }
 
@@ -94,10 +123,14 @@ int main()
     }
 
     auto start = chrono::high_resolution_clock::now();
-    vector<vector<int>> res = MultiplyMatrix(nA, mB, A, B);
+    vector<vector<int>> res = MultiplyMatrix(nA, mB, mA, A, B);
     auto finish = chrono::high_resolution_clock::now();
 
     auto time = chrono::duration_cast<chrono::milliseconds>(finish - start);
 
-    WriteMatrix("MatrixAB.txt", nA, mB, res, time, 1);
+    WriteMatrix("tmp.txt", nA, mB, res);
+
+    bool cor = (system("python3 equivalence.py") == 0);
+
+    WriteMatrix("matrixAB.txt", nA, mB, res, time, cor);
 }
