@@ -114,7 +114,7 @@ int main()
 {
     int nA, mA, nB, mB;
     vector<vector<int>> A = ReadMatrix(nA, mA, "matrixA.txt");
-    vector<vector<int>> B = ReadMatrix(nB, mB, "matrixB.txt");
+    vector<vector<int>> B = ReadMatrix(nB, mB, "matrixA.txt");
 
     if (nB != mA)
     {
