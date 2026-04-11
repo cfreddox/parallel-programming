@@ -1,0 +1,7 @@
+100 100 Time: 1 Correctly: 1
+200 200 Time: 2 Correctly: 1
+400 400 Time: 10 Correctly: 1
+800 800 Time: 127 Correctly: 1
+1200 1200 Time: 324 Correctly: 1
+1600 1600 Time: 823 Correctly: 1
+2000 2000 Time: 1500 Correctly: 1
